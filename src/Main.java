@@ -1,47 +1,62 @@
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
-//gettignt he current year
 import java.util.Scanner;
-//^Allow reading of user input
-import java.io.File;
-//^to be able to read files
-import java.util.Date;
-//^calling on scanner input to get the user input.
 public class Main {
-    //^this is where we will keep all the attributes of our code e.g. main code and i
     public static void main(String[] args) throws IOException {
-        Scanner sc= new Scanner(System.in);    //System.in is a standard input stream
-        System.out.print("Hai welcome, Pls enter your name"+"\t");
-        System.out.print("First Name");
-        String First= sc.nextLine();
-        //this will make sure the first name will always be captialised
-        String FirstName= First.substring(0, 1).toUpperCase() + First.substring(1);
-        //Saves the first name
-        System.out.print("Second Name");
-        String Second = sc.nextLine();
-        String SecondName= Second.substring(0, 1).toUpperCase() + Second.substring(1);
-        //Saves the Second name
-        //by doing this, it will make sure the input will always be capitalised.
-        System.out.print("What's your age");
-        int Age= sc.nextInt();
-        //Saves the age
-        System.out.printf("Welcome "+"%-5s %s\n", FirstName, SecondName);
-        //adds distance between the input
-        //Show the year of birth
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        //subtract current year by age
-        int DOB = year - Age;
-        System.out.println("Age:"+ Age+"("+DOB+")");
-        //Text file
-        File File1 = new File("Users.txt");
-        FileWriter fw = new FileWriter(File1);
-        //adding the info into text file
-        PrintWriter pw = new PrintWriter(fw);
-        String FinalName = FirstName + SecondName;
-        pw.write(FinalName);
-        pw.write(Age);
-        pw.close();
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            // Get First Name
+            System.out.print("First Name: ");
+            String first = sc.nextLine();
+            while (!first.matches("^[a-zA-Z]*$")) {
+                System.out.println("Please enter a valid first name (text only).");
+                System.out.print("First Name: ");
+                first = sc.nextLine();
+            }
+            String firstName = first.substring(0, 1).toUpperCase() + first.substring(1);
+
+            // Get Second Name
+            System.out.print("Second Name: ");
+            String second = sc.nextLine();
+            while (!second.matches("^[a-zA-Z]*$")) {
+                System.out.println("Please enter a valid second name (text only).");
+                System.out.print("Second Name: ");
+                second = sc.nextLine();
+            }
+            String secondName = second.substring(0, 1).toUpperCase() + second.substring(1);
+
+            // Get Age
+            System.out.print("Age: ");
+            String ageStr = sc.nextLine();
+            while (!ageStr.matches("^\\d+$")) {
+                System.out.println("Please enter a valid age (numbers only).");
+                System.out.print("Age: ");
+                ageStr = sc.nextLine();
+            }
+            int age = Integer.parseInt(ageStr);
+
+            // Save to file option
+            System.out.print("Do you want to save the details to a file? (yes/no): ");
+            String saveToFile = sc.nextLine().toLowerCase();
+            if ("yes".equals(saveToFile)) {
+                try (PrintWriter out = new PrintWriter("user_details.txt", "UTF-8")) {
+                    out.println("First Name: " + firstName);
+                    out.println("Second Name: " + secondName);
+                    out.println("Age: " + age);
+                }
+                System.out.println("Details saved to user_details.txt.");
+            }
+
+            // Continue or Exit
+            System.out.print("Do you want to enter another entry? (yes/no): ");
+            String continueEntry = sc.nextLine().toLowerCase();
+            if ("no".equals(continueEntry)) {
+                break;
+            }
+        }
+
+        sc.close();
+        System.out.println("Thank you for using the program!");
     }
 }
